@@ -29,5 +29,6 @@ func authRoutes(router *gin.Engine) {
 	authGroup := router.Group("/v1/auth")
 	{
 		authGroup.POST("/login", handlers.Login)
+		authGroup.POST("/register", handlers.RegisterUser)
 	}
 }

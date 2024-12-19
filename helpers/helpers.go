@@ -1,8 +1,10 @@
 package helpers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -88,3 +90,55 @@ func ProcessLogin(c *gin.Context) (req map[string]interface{}, user models.User,
 
 	return
 }
+
+func ValidateRequest(req map[string]interface{}, req_type string) error {
+	var requiredFields []string
+
+	switch req_type {
+	case "User":
+		requiredFields = []string{"username", "password"}
+	// case "Mock":
+	// 	requiredFields = []string{"enrollment", "gh_language", "french", "school_name", "contact", "location"}
+	// case "Terminal":
+	// 	requiredFields = []string{"nursery_enrollment", "kg_enrollment", "basic_1_enrollment", "basic_2_enrollment", "basic_3_enrollment", "basic_4_enrollment", "basic_5_enrollment", "basic_6_enrollment", "basic_7_enrollment", "basic_8_enrollment", "school_name", "contact", "location"}
+	default:
+		return fmt.Errorf("invalid request type")
+	}
+
+	for _, field := range requiredFields {
+		if _, ok := req[field]; !ok {
+			return fmt.Errorf("%s is required", field)
+		}
+		// Trim whitespace from the field value if it's a string
+		if strVal, ok := req[field].(string); ok {
+			strVal = strings.TrimSpace(strVal)
+			if strVal == "" {
+				return fmt.Errorf("%s cannot be empty", field)
+			}
+			req[field] = strVal
+		}
+	}
+
+	// Additional validation for User type
+	// if req_type == "User" {
+
+	// 	phoneNumber, ok := req["phone_number"].(string)
+	// 	if !ok || !IsValidPhoneNumber(phoneNumber) {
+	// 		return fmt.Errorf("invalid phone number")
+	// 	}
+	// }
+
+	return nil
+}
+
+// func IsValidPhoneNumber(phoneNumber string) bool {
+// 	if len(phoneNumber) != 10 {
+// 		return false
+// 	}
+
+// 	if !regexp.MustCompile(`^\d+$`).MatchString(phoneNumber) {
+// 		return false
+// 	}
+
+// 	return true
+// }
