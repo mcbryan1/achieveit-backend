@@ -135,7 +135,7 @@ func DeleteGoal(c *gin.Context) {
 	goalID := c.Param("id")
 
 	var goal models.Goal
-	results := initializers.DB.Where("id = ?", goalID).First(&goal)
+	results := initializers.DB.Where("id = ?", goalID).Preload("Milestones").First(&goal)
 	if results.Error != nil {
 		helpers.RespondWithError(c, http.StatusInternalServerError, results.Error, "500")
 		return

@@ -57,8 +57,8 @@ func milestoneRoutes(router *gin.Engine) {
 		milestoneGroup.POST("/create-milestone", handlers.CreateMilestone)
 		milestoneGroup.GET("/fetch-milestones", handlers.GetMilestones)
 		// milestoneGroup.GET("/fetch-milestone/:id", handlers.GetMilestone)
-		// milestoneGroup.PUT("/update-milestone/:id", handlers.UpdateMilestone)
-		// milestoneGroup.DELETE("/delete-milestone/:id", handlers.DeleteMilestone)
+		milestoneGroup.PUT("/update-milestone/:id", handlers.UpdateMilestone)
+		milestoneGroup.DELETE("/delete-milestone/:id", handlers.DeleteMilestone)
 	}
 
 }
