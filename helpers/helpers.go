@@ -97,10 +97,10 @@ func ValidateRequest(req map[string]interface{}, req_type string) error {
 	switch req_type {
 	case "User":
 		requiredFields = []string{"username", "password"}
-	// case "Mock":
-	// 	requiredFields = []string{"enrollment", "gh_language", "french", "school_name", "contact", "location"}
-	// case "Terminal":
-	// 	requiredFields = []string{"nursery_enrollment", "kg_enrollment", "basic_1_enrollment", "basic_2_enrollment", "basic_3_enrollment", "basic_4_enrollment", "basic_5_enrollment", "basic_6_enrollment", "basic_7_enrollment", "basic_8_enrollment", "school_name", "contact", "location"}
+	case "Goal":
+		requiredFields = []string{"title", "description"}
+	case "Milestone":
+		requiredFields = []string{"title", "goal_id", "completed"}
 	default:
 		return fmt.Errorf("invalid request type")
 	}
@@ -131,14 +131,16 @@ func ValidateRequest(req map[string]interface{}, req_type string) error {
 	return nil
 }
 
-// func IsValidPhoneNumber(phoneNumber string) bool {
-// 	if len(phoneNumber) != 10 {
-// 		return false
-// 	}
+func GetUserIDFromContext(c *gin.Context) (string, bool, error) {
+	userID, exists := c.Get("user_id")
+	if !exists {
+		return "", false, nil
+	}
 
-// 	if !regexp.MustCompile(`^\d+$`).MatchString(phoneNumber) {
-// 		return false
-// 	}
+	typedUserID, ok := userID.(string)
+	if !ok {
+		return "", false, fmt.Errorf("failed to retrieve user ID from context")
+	}
 
-// 	return true
-// }
+	return typedUserID, true, nil
+}
