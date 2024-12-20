@@ -15,6 +15,7 @@ func SetupRouter() *gin.Engine {
 	authRoutes(router)
 	goalRoutes(router)
 	milestoneRoutes(router)
+	commentRoutes(router)
 
 	return router
 }
@@ -56,9 +57,18 @@ func milestoneRoutes(router *gin.Engine) {
 	{
 		milestoneGroup.POST("/create-milestone", handlers.CreateMilestone)
 		milestoneGroup.GET("/fetch-milestones", handlers.GetMilestones)
-		// milestoneGroup.GET("/fetch-milestone/:id", handlers.GetMilestone)
 		milestoneGroup.PUT("/update-milestone/:id", handlers.UpdateMilestone)
 		milestoneGroup.DELETE("/delete-milestone/:id", handlers.DeleteMilestone)
 	}
 
+}
+
+func commentRoutes(router *gin.Engine) {
+	commentGroup := router.Group("/v1/comments")
+	commentGroup.Use(middlewares.AuthMiddleware())
+	{
+		commentGroup.POST("/create-comment", handlers.CreateComment)
+		commentGroup.PUT("/update-comment/:id", handlers.UpdateComment)
+		commentGroup.DELETE("/delete-comment/:id", handlers.DeleteComment)
+	}
 }

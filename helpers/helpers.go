@@ -101,6 +101,8 @@ func ValidateRequest(req map[string]interface{}, req_type string) error {
 		requiredFields = []string{"title", "description"}
 	case "Milestone":
 		requiredFields = []string{"title", "goal_id", "completed"}
+	case "Comment":
+		requiredFields = []string{"content", "milestone_id"}
 	default:
 		return fmt.Errorf("invalid request type")
 	}
