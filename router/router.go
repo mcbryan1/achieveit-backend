@@ -25,7 +25,7 @@ func applyCORS(router *gin.Engine) {
 	// config.AllowOrigins = []string{"http://localhost:3000"}
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
-	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Accept"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Accept", "source"}
 	router.Use(cors.New(config))
 }
 

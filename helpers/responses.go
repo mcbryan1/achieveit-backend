@@ -34,7 +34,11 @@ func FetchGoalsResponse(goals []models.Goal) []map[string]interface{} {
 				completedMilestones++
 			}
 		}
-		goal.Progress = (float64(completedMilestones) / float64(len(goal.Milestones))) * 100
+		if len(goal.Milestones) > 0 {
+			goal.Progress = (float64(completedMilestones) / float64(len(goal.Milestones))) * 100
+		} else {
+			goal.Progress = 0
+		}
 
 		// Save the updated progress
 		initializers.DB.Save(&goal)

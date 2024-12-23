@@ -8,6 +8,7 @@ import (
 	"github.com/mcbryan1/achieveit-backend/helpers"
 	"github.com/mcbryan1/achieveit-backend/initializers"
 	"github.com/mcbryan1/achieveit-backend/models"
+	"gorm.io/gorm"
 )
 
 func CreateGoal(c *gin.Context) {
@@ -73,7 +74,9 @@ func GetGoals(c *gin.Context) {
 	}
 
 	var goals []models.Goal
-	results := initializers.DB.Where("user_id = ?", uid).Preload("Milestones").Find(&goals)
+	results := initializers.DB.Where("user_id = ?", uid).Preload("Milestones", func(db *gorm.DB) *gorm.DB {
+		return db.Order("created_at desc")
+	}).Find(&goals)
 	if results.Error != nil {
 		helpers.RespondWithError(c, http.StatusInternalServerError, results.Error, "500")
 		return
